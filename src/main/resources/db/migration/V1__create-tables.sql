@@ -46,3 +46,5 @@ CREATE TABLE respostas (
     FOREIGN KEY (topico_id) REFERENCES topicos(id),
     FOREIGN KEY (autor_id) REFERENCES usuarios(id)
 );
+
+INSERT INTO perfis (nome) VALUES ('ROLE_USER');
