@@ -6,5 +6,8 @@ public record DadosListagemTopico(
         Long id,
         String titulo,
         String mensagem,
-        LocalDateTime dataCriacao
+        LocalDateTime dataCriacao,
+        String status,
+        String nomeAutor,
+        String nomeCurso
 ) {}

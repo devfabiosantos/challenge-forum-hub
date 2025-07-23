@@ -29,7 +29,10 @@ public class TopicoService {
                         topico.getId(),
                         topico.getTitulo(),
                         topico.getMensagem(),
-                        topico.getDataCriacao()
+                        topico.getDataCriacao(),
+                        topico.getStatus(),
+                        topico.getAutor().getNome(),
+                        topico.getCurso().getNome()
                 ))
                 .toList();
     }
@@ -44,6 +47,7 @@ public class TopicoService {
                 topico.getMensagem(),
                 topico.getDataCriacao(),
                 topico.getAutor().getNome(),
+                topico.getCurso().getNome(),
                 topico.getStatus(),
                 topico.getRespostas().stream()
                         .map(r -> new DadosResposta(
@@ -87,6 +91,7 @@ public class TopicoService {
                 salvo.getMensagem(),
                 salvo.getDataCriacao(),
                 salvo.getAutor().getNome(),
+                salvo.getCurso().getNome(),
                 salvo.getStatus(),
                 List.of()
         );
@@ -98,6 +103,14 @@ public class TopicoService {
 
         if (!topico.getAutor().getEmail().equals(userDetails.getUsername())) {
             throw new RuntimeException("Sem permissão para editar este tópico");
+        }
+
+        // Verifica duplicidade ignorando o próprio
+        boolean existeDuplicado = topicoRepository.existsByTituloAndMensagem(dados.titulo(), dados.mensagem());
+        boolean mudouConteudo = !topico.getTitulo().equals(dados.titulo()) || !topico.getMensagem().equals(dados.mensagem());
+
+        if (existeDuplicado && mudouConteudo) {
+            throw new RuntimeException("Já existe outro tópico com o mesmo título e mensagem");
         }
 
         topico.setTitulo(dados.titulo());

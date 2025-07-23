@@ -32,7 +32,7 @@ public class TopicoController {
 
     @PostMapping
     public ResponseEntity<DadosDetalheTopico> criar(
-            @RequestBody @Valid DadosNovoTopico dados, // 🔑 @Valid aqui!
+            @RequestBody @Valid DadosNovoTopico dados,
             @AuthenticationPrincipal UserDetails userDetails) {
         var criado = topicoService.criar(dados, userDetails);
         return ResponseEntity.ok(criado);

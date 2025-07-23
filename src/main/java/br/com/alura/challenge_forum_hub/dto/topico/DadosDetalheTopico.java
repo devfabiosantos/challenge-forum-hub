@@ -9,6 +9,7 @@ public record DadosDetalheTopico(
         String mensagem,
         LocalDateTime dataCriacao,
         String nomeAutor,
+        String nomeCurso,
         String status,
         List<DadosResposta> respostas
 ) {}
