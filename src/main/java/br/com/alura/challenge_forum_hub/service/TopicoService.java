@@ -68,7 +68,6 @@ public class TopicoService {
         Curso curso = cursoRepository.findByNome(dados.nomeCurso())
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
 
-        // Verifica duplicidade
         boolean existeDuplicado = topicoRepository.existsByTituloAndMensagem(dados.titulo(), dados.mensagem());
         if (existeDuplicado) {
             throw new RuntimeException("Já existe um tópico com o mesmo título e mensagem");
@@ -105,7 +104,6 @@ public class TopicoService {
             throw new RuntimeException("Sem permissão para editar este tópico");
         }
 
-        // Verifica duplicidade ignorando o próprio
         boolean existeDuplicado = topicoRepository.existsByTituloAndMensagem(dados.titulo(), dados.mensagem());
         boolean mudouConteudo = !topico.getTitulo().equals(dados.titulo()) || !topico.getMensagem().equals(dados.mensagem());
 

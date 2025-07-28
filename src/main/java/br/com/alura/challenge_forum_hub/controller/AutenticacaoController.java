@@ -1,32 +1,36 @@
 package br.com.alura.challenge_forum_hub.controller;
 
-import br.com.alura.challenge_forum_hub.security.JwtUtil;
+import br.com.alura.challenge_forum_hub.dto.LoginRequest;
+import br.com.alura.challenge_forum_hub.dto.LoginResponse;
+import br.com.alura.challenge_forum_hub.security.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
+@RequestMapping("/login")
 @RequiredArgsConstructor
 public class AutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
+    private final TokenService tokenService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest login) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(login.email(), login.senha())
+    @PostMapping
+    public LoginResponse autenticar(@RequestBody LoginRequest loginRequest) {
+
+        var authToken = new UsernamePasswordAuthenticationToken(
+                loginRequest.email(),
+                loginRequest.senha()
         );
 
-        User user = (User) auth.getPrincipal();
-        String token = jwtUtil.generateToken(user.getUsername());
-        return ResponseEntity.ok(Map.of("token", token));
+        var authResult = authenticationManager.authenticate(authToken);
+
+        var userDetails = (org.springframework.security.core.userdetails.UserDetails) authResult.getPrincipal();
+
+        String token = tokenService.gerarToken(userDetails);
+
+        return new LoginResponse(token, "bearer");
     }
 
-    public record LoginRequest(String email, String senha) {}
 }

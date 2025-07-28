@@ -27,7 +27,6 @@ public class UsuarioService {
                 .senha(passwordEncoder.encode(dto.senha()))
                 .build();
 
-        // Opcional: atribui perfil padrão ROLE_USER
         Perfil perfilUser = perfilRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("Perfil padrão não encontrado"));
 

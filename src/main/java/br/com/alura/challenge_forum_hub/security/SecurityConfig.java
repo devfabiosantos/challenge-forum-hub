@@ -25,12 +25,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll() // Permite login sem token
-                        .requestMatchers(HttpMethod.GET, "/topicos", "/topicos/*").permitAll() // Libera GETs
-                        .requestMatchers(HttpMethod.POST, "/topicos").authenticated() // POST exige token
-                        .requestMatchers(HttpMethod.PUT, "/topicos/*").authenticated() // PUT exige token
-                        .requestMatchers(HttpMethod.DELETE, "/topicos/*").authenticated() // DELETE exige token
-                        .anyRequest().authenticated() // Qualquer outro precisa de token também
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/topicos", "/topicos/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/topicos").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/topicos/*").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/topicos/*").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
