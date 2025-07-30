@@ -1,7 +1,6 @@
 package br.com.alura.challenge_forum_hub.security;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,13 +39,16 @@ public class TokenService {
     }
 
     public String validarToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (JwtException ex) {
+            // Aqui lançamos explicitamente para o Handler capturar!
+            throw new JwtException("Token JWT inválido ou expirado");
+        }
     }
-
-
 }
