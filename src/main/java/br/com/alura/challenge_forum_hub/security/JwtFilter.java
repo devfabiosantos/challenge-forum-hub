@@ -33,10 +33,8 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
 
-            // Se o token for inválido, o TokenService vai lançar JwtException
             String username = tokenService.validarToken(jwt);
 
-            // Só autentica se username não for nulo
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = autenticacaoService.loadUserByUsername(username);
 

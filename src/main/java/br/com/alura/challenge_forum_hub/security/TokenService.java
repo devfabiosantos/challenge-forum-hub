@@ -47,7 +47,6 @@ public class TokenService {
                     .getBody()
                     .getSubject();
         } catch (JwtException ex) {
-            // Aqui lançamos explicitamente para o Handler capturar!
             throw new JwtException("Token JWT inválido ou expirado");
         }
     }
